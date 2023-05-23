@@ -86,18 +86,30 @@ function start() {
 }
 
 function displayRandomQuestion() {
+    //Get a random question, making sure not to grab one that has been displayed already
     var question  = questionObjects[Math.floor(Math.random() * questionObjects.length)];
     while (question.visited) {
         question  = questionObjects[Math.floor(Math.random() * questionObjects.length)];
     }
+    //Mark the question as having been displayed
+    question.visited = true;
 
-    var buttons = [];
+    //Render question text
+    questionText.textContent = question.question;
+
+    //Render answers
     for (var i = 0; i < 4; i++) {
         var button = document.createElement("button");
-        button.textContent = question
+        var li = document.createElement("li");
+        li.append(button);
+
+        button.textContent = question.answers[i];
+
+        answers.append(li);     
     }
 }
 
 startButton.addEventListener("click", start);
 
 init();
+displayRandomQuestion();
