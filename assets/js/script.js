@@ -59,7 +59,7 @@ var questionObjects = [
     },
     {
         question: "A very useful tool used during debugging for printing values to the debugger is:",
-        anwers: [
+        answers: [
             "javascript",
             "terminal/bash",
             "for loops",
@@ -69,6 +69,8 @@ var questionObjects = [
         visited: false
     }
 ];
+
+var currentQuestion = {};
 
 function init() {
     questionsPage.style.display = "none";
@@ -85,17 +87,25 @@ function start() {
     questionsPage.style.display = "block";
 }
 
-function displayRandomQuestion() {
-    //Get a random question, making sure not to grab one that has been displayed already
-    var question  = questionObjects[Math.floor(Math.random() * questionObjects.length)];
-    while (question.visited) {
-        question  = questionObjects[Math.floor(Math.random() * questionObjects.length)];
+function newQuestion() {
+    currentQuestion  = questionObjects[Math.floor(Math.random() * questionObjects.length)];
+    while (currentQuestion.visited) {
+        currentQuestion  = questionObjects[Math.floor(Math.random() * questionObjects.length)];
     }
-    //Mark the question as having been displayed
-    question.visited = true;
 
+    currentQuestion.visited = true;
+}
+
+function clearQuestions() {
+    var lis = answers.children;
+    for (var i = 0; i < lis.length; i++) {
+        lis[i].remove();
+    }
+}
+
+function displayCurrentQuestion() {
     //Render question text
-    questionText.textContent = question.question;
+    questionText.textContent = currentQuestion.question;
 
     //Render answers
     for (var i = 0; i < 4; i++) {
@@ -103,13 +113,21 @@ function displayRandomQuestion() {
         var li = document.createElement("li");
         li.append(button);
 
-        button.textContent = question.answers[i];
+        button.textContent = currentQuestion.answers[i];
 
-        answers.append(li);     
+        answers.append(li);
     }
 }
 
 startButton.addEventListener("click", start);
+answers.addEventListener("click", function(event) {
+    if (event.target.textContent === currentQuestion.answers[currentQuestion.correct]) {
+        rightOrWrong.textContent = "Correct!";
+    } else {
+        rightOrWrong.textContent = "Incorrect.";
+    }
+});
 
 init();
-displayRandomQuestion();
+newQuestion();
+displayCurrentQuestion();
