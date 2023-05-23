@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Quiz!</title>
+</head>
+<body>
+    <section id="game">
+        <nav id="high-score-link"></nav>
+        <div id="timer"></div>
+        <div id="start">
+            <h1>
+                Coding Quiz Challenge
+            </h1>
+            <p>
+                Answer the following questions within the time limit. Wrong answers will subtract time from the time limit.
+            </p>
+            <button>
+                Start
+            </button>
+        </div>
+        <div id="questions">
+            <h1 id="question"></h1>
+            <ul id="answers"></ul>
+        </div>
+        <div id="right-wrong"></div>
+    </section>
+    <section id="high-scores">
+        <h1>
+            Finished!
+        </h1>
+        <p>
+            Your final score is: <span id="final-score"></span>.
+        </p>
+        <p>
+            Enter initials: 
+        </p>
+        <input type="text">
+        <button>Submit</button>
+    </section>
+    <script src="./assets/js/script.js"></script>
+</body>
+</html>
