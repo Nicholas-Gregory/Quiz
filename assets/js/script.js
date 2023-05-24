@@ -72,6 +72,9 @@ var questionObjects = [
 
 var currentQuestion = {};
 
+var timer = 60;
+var score  = 0;
+
 function init() {
     questionsPage.style.display = "none";
     highScoresPage.style.display = "none";
@@ -96,11 +99,8 @@ function newQuestion() {
     currentQuestion.visited = true;
 }
 
-function clearQuestions() {
-    var lis = answers.children;
-    for (var i = 0; i < lis.length; i++) {
-        lis[i].remove();
-    }
+function clearQuestion() {
+    answers.innerHTML = "";
 }
 
 function displayCurrentQuestion() {
@@ -119,12 +119,25 @@ function displayCurrentQuestion() {
     }
 }
 
+function handleAnswer(right) {
+    if (right) {
+        rightOrWrong.textContent = "Correct!";
+        score += 5;
+    } else {
+        rightOrWrong.textContent = "Incorrect.";
+        timer -= 5;
+    }
+    clearQuestion();
+    newQuestion();
+    displayCurrentQuestion();
+}
+
 startButton.addEventListener("click", start);
 answers.addEventListener("click", function(event) {
     if (event.target.textContent === currentQuestion.answers[currentQuestion.correct]) {
-        rightOrWrong.textContent = "Correct!";
+        handleAnswer(true);
     } else {
-        rightOrWrong.textContent = "Incorrect.";
+        handleAnswer(false);
     }
 });
 
