@@ -1,6 +1,6 @@
 var gamePage = document.getElementById("game");
 var hsLink = document.getElementById("high-score-link");
-var timer = document.getElementById("timer");
+var timerText = document.getElementById("timer");
 var startPage = document.getElementById("start");
 var startButton = document.querySelector("#start button");
 var questionsPage = document.getElementById("questions");
@@ -75,6 +75,8 @@ var currentQuestion = {};
 var timer = 60;
 var score  = 0;
 
+var questionsAnswered = 0;
+
 function init() {
     questionsPage.style.display = "none";
     highScoresPage.style.display = "none";
@@ -84,10 +86,30 @@ function init() {
     }
 }
 
+function finish() {
+    questionsPage.style.display = "none";
+    highScoresPage.style.display = "block";
+
+    finalScore.textContent = score;
+}
+
 function start() {
     startPage.style.display = "none";
     highScoresPage.style.display = "none";
     questionsPage.style.display = "block";
+
+    newQuestion();
+    displayCurrentQuestion();
+
+    var interval = setInterval(function() {
+        timer--;
+        timerText.textContent = timer;
+
+        if (timer === 0) {
+            clearInterval(interval);
+            finish();
+        }
+    }, 1000);
 }
 
 function newQuestion() {
@@ -134,6 +156,11 @@ function handleAnswer(right) {
 
 startButton.addEventListener("click", start);
 answers.addEventListener("click", function(event) {
+    questionsAnswered++;
+    if (questionsAnswered === questionObjects.length) {
+        finish();
+        return;
+    }
     if (event.target.textContent === currentQuestion.answers[currentQuestion.correct]) {
         handleAnswer(true);
     } else {
@@ -142,5 +169,3 @@ answers.addEventListener("click", function(event) {
 });
 
 init();
-newQuestion();
-displayCurrentQuestion();
