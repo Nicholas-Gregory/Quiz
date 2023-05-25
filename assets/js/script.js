@@ -12,7 +12,7 @@ var finalScore = document.getElementById("final-score");
 var initialsInput = document.querySelector("#finish input");
 var initialsButton = document.querySelector("#finish button");
 var highScoresPage = document.getElementById("high-scores-page");
-var highScoresUl = document.getElementById("high-scores");
+var highScoresOl = document.getElementById("high-scores");
 var backButton = document.getElementById("back");
 var clearButton = document.getElementById("clear");
 
@@ -195,13 +195,13 @@ function displayHighScores() {
     startPage.style.display = "none";
     finishPage.style.display = "none";
 
-    highScoresUl.innerHTML = "";
+    highScoresOl.innerHTML = "";
 
     highScores.sort(compareScores);
     for (var i = 0; i < highScores.length; i++) {
         var element = document.createElement("li");
         element.textContent = highScores[i].initials + ": " + highScores[i].score;
-        highScoresUl.append(element);
+        highScoresOl.append(element);
     }
 }
 
