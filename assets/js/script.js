@@ -91,6 +91,7 @@ function compareScores(a, b) {
     } else if (a.score > b.score) {
         return -1;
     }
+    return 0;
 }
 
 function init() {

@@ -1,0 +1,11 @@
+body {
+    text-align: center;
+}
+
+ul {
+    list-style-type: none;
+}
+
+#finish, #high-scores-page, #questions {
+    display: none;
+}
