@@ -7,10 +7,14 @@ var questionsPage = document.getElementById("questions");
 var questionText = document.getElementById("question");
 var answers = document.getElementById("answers");
 var rightOrWrong = document.getElementById("right-wrong");
-var highScoresPage = document.getElementById("high-scores");
+var finishPage = document.getElementById("finish");
 var finalScore = document.getElementById("final-score");
-var initialsInput = document.querySelector("#high-scores input");
-var initialsButton = document.querySelector("#high-scores button");
+var initialsInput = document.querySelector("#finish input");
+var initialsButton = document.querySelector("#finish button");
+var highScoresPage = document.getElementById("high-scores-page");
+var highScoresUl = document.getElementById("high-scores");
+var backButton = document.getElementById("back");
+var clearButton = document.getElementById("clear");
 
 var questionObjects = [
     {
@@ -77,36 +81,67 @@ var score  = 0;
 
 var questionsAnswered = 0;
 
+var interval = {};
+
+var highScores = [];
+
+function compareScores(a, b) {
+    if (a.score < b.score) {
+        return 1;
+    } else if (a.score > b.score) {
+        return -1;
+    }
+}
+
 function init() {
     questionsPage.style.display = "none";
+    finishPage.style.display = "none";
     highScoresPage.style.display = "none";
+    startPage.style.display = "block";
+
+    timer = 60;
+    score = 0;
+    timerText.textContent = "60";
+    questionsAnswered = 0;
+    rightOrWrong.textContent = "";
+
+    clearQuestion();
 
     for (var i = 0; i < questionObjects.length; i++) {
         questionObjects[i].visited = false;
+    }
+
+    var highScoresObject = JSON.parse(localStorage.getItem("highScores"));
+    if (highScoresObject) {
+        highScores = highScoresObject;
     }
 }
 
 function finish() {
     questionsPage.style.display = "none";
-    highScoresPage.style.display = "block";
+    highScoresPage.style.display = "none";
+    startPage.style.display = "none";
+    finishPage.style.display = "block";
 
     finalScore.textContent = score;
+
+    clearInterval(interval);
 }
 
 function start() {
     startPage.style.display = "none";
+    finishPage.style.display = "none";
     highScoresPage.style.display = "none";
     questionsPage.style.display = "block";
 
     newQuestion();
     displayCurrentQuestion();
 
-    var interval = setInterval(function() {
+    interval = setInterval(function() {
         timer--;
         timerText.textContent = timer;
 
         if (timer === 0) {
-            clearInterval(interval);
             finish();
         }
     }, 1000);
@@ -154,6 +189,22 @@ function handleAnswer(right) {
     displayCurrentQuestion();
 }
 
+function displayHighScores() {
+    questionsPage.style.display = "none";
+    highScoresPage.style.display = "block";
+    startPage.style.display = "none";
+    finishPage.style.display = "none";
+
+    highScoresUl.innerHTML = "";
+
+    highScores.sort(compareScores);
+    for (var i = 0; i < highScores.length; i++) {
+        var element = document.createElement("li");
+        element.textContent = highScores[i].initials + ": " + highScores[i].score;
+        highScoresUl.append(element);
+    }
+}
+
 startButton.addEventListener("click", start);
 answers.addEventListener("click", function(event) {
     questionsAnswered++;
@@ -166,6 +217,25 @@ answers.addEventListener("click", function(event) {
     } else {
         handleAnswer(false);
     }
+});
+
+initialsButton.addEventListener("click", function() {
+    var initials = initialsInput.value;
+    if (initials !== "") {
+        highScores.push({initials: initials, score: score});
+        localStorage.setItem("highScores", JSON.stringify(highScores));
+        displayHighScores();
+    }    
+});
+
+backButton.addEventListener("click", function() {
+    init();
+});
+
+clearButton.addEventListener("click", function() {
+    highScores = [];
+    localStorage.clear();
+    displayHighScores();
 });
 
 init();
